@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style>
+.one{
+	height:2000px;
+	background-color:pink;
+}
+.two{
+	height:2000px;
+	background-color:#ccc;
+}
+.three{
+	height:2000px;
+	background-color:purple;
+}
+.four{
+	height:2000px;
+	background-color:lightblue;
+}
+
+.iAnimate{
+	visibility:hidden;
+}
+.iAnimate.animated{
+	visibility:visible;
+	border:10px solid red;
+}
+</style> 
+<body>
+<div class="one iAnimate"   data-offset="220" ></div>
+<div class="two iAnimate" data-delay="1000" data-offset="1330"></div>
+<div class="three iAnimate"  data-offset="1400"></div>
+<div class="four iAnimate"  data-offset="1500"></div>
+</body>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+(function(className){
+		var arr=[],
+		winH=$(window).height();
+	$('.'+className).each(function(){
+		var delay=$(this).attr('data-delay'),
+			offset=$(this).attr('data-offset');
+		arr.push({
+			ele:$(this),
+			delay:delay?parseInt(delay):0,
+			iTop:$(this).offset().top+(offset?parseInt(offset):0)
+		});
+	});
+	$(window).on('scroll',function(){
+		var scrollTop=$(window).scrollTop()+winH;
+		for(i in arr){
+			if(arr[i].iTop<=scrollTop){
+				if(arr[i].delay){
+					(function(){
+						var target=arr[i].ele;
+						setTimeout(function(){
+							target.addClass('animated');
+						},arr[i].delay);
+					})();
+				}else{
+					arr[i].ele.addClass('animated');
+				}
+				arr.splice(i,1);
+			}
+		}
+	}).on('resize',function(){
+		winH=$(window).height();
+	})
+})('iAnimate');
+
+// 页面滚动到某个位置，改变其css
+// 使用方法1. 在页面上给需要添加事件的元素添加类名iAnimate 
+		// 2. 使用自定义属性给元素添加延迟时间data-delay和滚动到元素的时候要增加的距离data-offset
+		// 3. 在animated里设置要更改的css
+
+</script>
+</html>
